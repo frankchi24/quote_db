@@ -1,0 +1,15 @@
+# Python-related
+*.pyc
+__pycache__/
+
+# macOS-related
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor/IDE files
+.vscode/
+.idea/
+
+# Virtual environment
+venv/

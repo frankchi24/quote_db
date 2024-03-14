@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quote Detail</title>
+</head>
+<body>
+    <h1>對白</h1>
+    <p><strong>時間:</strong> {{ quote['timestamp'] }}</p>
+    <p><strong>對白:</strong> {{ quote['quote_en'] }}</p>
+    <p><strong>中文翻譯:</strong> {{ quote['quote_cn'] }}</p>
+    <video controls>
+    <source src="{{ url_for('static', filename='videos/' + quote['video_filename']) }}" type="video/mp4">
+    Your browser does not support the video tag.
+    </video>
+    <br>
+    <a href="{{ url_for('index') }}">回到對白頁面</a>
+    <br>
+    {% if prev_quote_id %}
+    <a href="{{ url_for('quote', quote_id=prev_quote_id) }}">上一句</a>
+    {% endif %}
+    
+    {% if next_quote_id %}
+        <a href="{{ url_for('quote', quote_id=next_quote_id) }}">下一句</a>
+    {% endif %}
+    
+</body>
+</html>

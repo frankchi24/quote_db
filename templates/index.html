@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Quotes</title>
+</head>
+<body>
+    <h1>Movie Quotes</h1>
+    <ul>
+        {% for quote in quotes %}
+            <li>
+                <a href="{{ url_for('quote', quote_id=quote['id']) }}">
+                    {{ quote['timestamp'] }} - {{ quote['quote_cn'] }} / {{ quote['quote_en'] }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
