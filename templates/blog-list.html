@@ -299,26 +299,30 @@
                             </tfoot>
                         </table>
                         <div id="data-table_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-5">
-                                <div class="dataTables_info" id="data-table_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
-                            </div>
-                            <div class="col-sm-12 col-md-7">
-                                <div class="dataTables_paginate paging_simple_numbers" id="data-table_paginate">
-                                    <ul class="pagination">
-                                        <li class="paginate_button page-item previous disabled" id="data-table_previous"><a href="#" aria-controls="data-table" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
-                                        <li class="paginate_button page-item active"><a href="#" aria-controls="data-table" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
-                                        <li class="paginate_button page-item "><a href="#" aria-controls="data-table" data-dt-idx="2" tabindex="0" class="page-link">2</a></li>
-                                        <li class="paginate_button page-item "><a href="#" aria-controls="data-table" data-dt-idx="3" tabindex="0" class="page-link">3</a></li>
-                                        <li class="paginate_button page-item "><a href="#" aria-controls="data-table" data-dt-idx="4" tabindex="0" class="page-link">4</a></li>
-                                        <li class="paginate_button page-item "><a href="#" aria-controls="data-table" data-dt-idx="5" tabindex="0" class="page-link">5</a></li>
-                                        <li class="paginate_button page-item "><a href="#" aria-controls="data-table" data-dt-idx="6" tabindex="0" class="page-link">6</a></li>
-                                        <li class="paginate_button page-item next" id="data-table_next"><a href="#" aria-controls="data-table" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li>
-                                    </ul>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-5">
+                                    <div class="dataTables_info" id="data-table_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
+                                </div>
+                                <div class="col-sm-12 col-md-7">
+                                    <div class="dataTables_paginate paging_simple_numbers" id="data-table_paginate">
+                                        <ul class="pagination">
+                                            <li class="paginate_button page-item {{ 'disabled' if page == 1 else '' }}">
+    <a href="{% if page > 1 %}{{ url_for('quote', quote_id=quote_id, page=page-1) }}{% else %}#{% endif %}" class="page-link">Previous</a>
+</li>
+                                            {% for num in range(1, total_pages + 1) %}
+                                            <li class="paginate_button page-item {{ 'active' if num == page else '' }}">
+                                                <a href="{{ url_for('quote', quote_id=quote_id, page=num) }}" class="page-link">{{ num }}</a>
+                                            </li>
+                                            {% endfor %}
+                                            <li class="paginate_button page-item {{ 'disabled' if page == total_pages else '' }}">
+    <a href="{% if page < total_pages %}{{ url_for('quote', quote_id=quote_id, page=page+1) }}{% else %}#{% endif %}" class="page-link">Next</a>
+</li>
+
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     </div>
                 </div>
                 <!-- Content Wrapper END -->

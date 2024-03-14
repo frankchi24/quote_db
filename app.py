@@ -27,7 +27,8 @@ def list_view():
     return render_template('data-table.html', quotes=quotes)
 
 @app.route('/quote/<int:quote_id>')
-def quote(quote_id):
+@app.route('/quote/<int:quote_id>/page/<int:page>')
+def quote(quote_id, page=1):
     # Convert quote_id to 0-based index
     index = quote_id - 1
 
@@ -38,12 +39,22 @@ def quote(quote_id):
     # Get the quote
     quote = quotes[index]
 
+    per_page = 10  # Number of quotes per page
+    start_index = (page - 1) * per_page
+    end_index = start_index + per_page
+    total_pages = (len(quotes) + per_page - 1) // per_page
+
+    paginated_quotes = quotes[start_index:end_index]
+
     # Calculate next and previous quote IDs
     next_quote_id = quote_id + 1 if quote_id < len(quotes) else None
     prev_quote_id = quote_id - 1 if quote_id > 1 else None
-    # Render the template with quote and navigation information
-    return render_template('blog-list.html', quote=quote, quotes=quotes, next_quote_id=next_quote_id, prev_quote_id=prev_quote_id)
 
+    # Render the template with quote, list of all quotes, and pagination information
+    return render_template('blog-list.html', quote=quote, quotes=paginated_quotes,
+                           next_quote_id=next_quote_id, prev_quote_id=prev_quote_id,
+                           page=page, total_pages=total_pages,
+                           quote_id=quote_id)  # Pass quote_id to the template context
 
 if __name__ == '__main__':
     app.run(debug=True)
