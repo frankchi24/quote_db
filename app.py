@@ -35,12 +35,15 @@ def search_quotes():
     if not search_query:
         return jsonify([])  # Return empty list if no query
 
-    # Filter quotes that match the search query
-    # This is a basic example; you might want to make it more sophisticated
-    filtered_quotes = [quote for quote in quotes if search_query.lower() in quote['quote_en'].lower()]
+    # Adjust search to be case-insensitive for English quotes
+    # and straightforward for Chinese quotes (no need to lower case)
+    search_query_lower = search_query.lower()
+
+    # Filter quotes that match the search query in either English or Chinese
+    filtered_quotes = [quote for quote in quotes if search_query_lower in quote['quote_en'].lower() or search_query in quote['quote_cn']]
 
     return jsonify(filtered_quotes)  # Return filtered quotes as JSON
-    
+
 @app.route('/quote/<int:quote_id>')
 @app.route('/quote/<int:quote_id>/page/<int:page>')
 def quote(quote_id, page=1):
