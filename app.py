@@ -1,4 +1,5 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request, jsonify
+
 import csv
 
 app = Flask(__name__)
@@ -26,6 +27,20 @@ def list_view():
     # You may need to pass any necessary data to the template here
     return render_template('data-table.html', quotes=quotes)
 
+
+
+@app.route('/search_quotes', methods=['GET'])
+def search_quotes():
+    search_query = request.args.get('query', '')  # Get search query from URL parameter
+    if not search_query:
+        return jsonify([])  # Return empty list if no query
+
+    # Filter quotes that match the search query
+    # This is a basic example; you might want to make it more sophisticated
+    filtered_quotes = [quote for quote in quotes if search_query.lower() in quote['quote_en'].lower()]
+
+    return jsonify(filtered_quotes)  # Return filtered quotes as JSON
+    
 @app.route('/quote/<int:quote_id>')
 @app.route('/quote/<int:quote_id>/page/<int:page>')
 def quote(quote_id, page=1):

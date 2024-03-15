@@ -271,6 +271,11 @@
                         </nav>
                     </div>
                     <div class="m-t-25">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div id="data-table_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="data-table"></label></div>
+                            </div>
+                        </div>
                         <table id="data-table" class="table">
                             <thead>
                                 <tr>
@@ -307,17 +312,16 @@
                                     <div class="dataTables_paginate paging_simple_numbers" id="data-table_paginate">
                                         <ul class="pagination">
                                             <li class="paginate_button page-item {{ 'disabled' if page == 1 else '' }}">
-    <a href="{% if page > 1 %}{{ url_for('quote', quote_id=quote_id, page=page-1) }}{% else %}#{% endif %}" class="page-link">Previous</a>
-</li>
+                                                <a href="{% if page > 1 %}{{ url_for('quote', quote_id=quote_id, page=page-1) }}{% else %}#{% endif %}" class="page-link">Previous</a>
+                                            </li>
                                             {% for num in range(1, total_pages + 1) %}
                                             <li class="paginate_button page-item {{ 'active' if num == page else '' }}">
                                                 <a href="{{ url_for('quote', quote_id=quote_id, page=num) }}" class="page-link">{{ num }}</a>
                                             </li>
                                             {% endfor %}
                                             <li class="paginate_button page-item {{ 'disabled' if page == total_pages else '' }}">
-    <a href="{% if page < total_pages %}{{ url_for('quote', quote_id=quote_id, page=page+1) }}{% else %}#{% endif %}" class="page-link">Next</a>
-</li>
-
+                                                <a href="{% if page < total_pages %}{{ url_for('quote', quote_id=quote_id, page=page+1) }}{% else %}#{% endif %}" class="page-link">Next</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -502,11 +506,40 @@
             <!-- Quick View END -->
         </div>
     </div>
+    <!-- Include jQuery first -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Core Vendors JS -->
     <script src="/static/js/vendors.min.js"></script>
-    <!-- page js -->
     <!-- Core JS -->
     <script src="/static/js/app.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Function to update the table with new data
+        function updateTable(quotes) {
+            var tbody = $('#data-table tbody');
+            tbody.empty(); // Clear current table body
+
+            // Populate table with new rows
+            $.each(quotes, function(index, quote) {
+                tbody.append(`<tr>
+                            <td>${quote['id']}</td>
+                            <td>${quote['timestamp']}</td>
+                            <td><a href="/quote/${quote['id']}">${quote['quote_en']}<br>${quote['quote_cn']}</a></td>
+                          </tr>`);
+            });
+        }
+
+        // Event listener for search input
+        $('#data-table_filter input[type="search"]').on('keyup', function() {
+            var query = $(this).val(); // Get the current value of the input
+
+            // Fetch filtered quotes from the server
+            $.getJSON('/search_quotes', { query: query }, function(data) {
+                updateTable(data); // Update the table with fetched data
+            });
+        });
+    });
+    </script>
 </body>
 
 </html>
